@@ -20,5 +20,5 @@ public interface IAccountService extends UserDetailsService {
 
     public String forgetPassword(ForgetPasswordForm form) throws MessagingException;
 
-    //public boolean changePassword(int id, ChangePasswordForm form);
+    public boolean changePassword(int id, ChangePasswordForm form);
 }

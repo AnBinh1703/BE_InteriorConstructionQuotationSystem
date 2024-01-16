@@ -1,6 +1,7 @@
 package com.example.be_interiorconstructionquotationsystem.service;
 
 import com.example.be_interiorconstructionquotationsystem.entity.Account;
+import com.example.be_interiorconstructionquotationsystem.entity.CustomUserDetail;
 import com.example.be_interiorconstructionquotationsystem.form.ChangePasswordForm;
 import com.example.be_interiorconstructionquotationsystem.form.CreateAccountForm;
 import com.example.be_interiorconstructionquotationsystem.form.ForgetPasswordForm;
@@ -9,15 +10,12 @@ import com.example.be_interiorconstructionquotationsystem.utils.EmailSender;
 import com.example.be_interiorconstructionquotationsystem.utils.RamdomNewPassword;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.mail.MessagingException;
 import java.util.List;
@@ -70,26 +68,26 @@ public class AccountService implements IAccountService {
         return newPass;
     }
 
-    /*@Override
+    @Override
     @Transactional
-    public boolean changePassword(int id, ChangePasswordForm form) throws MessagingException {
+    public boolean changePassword(int id, ChangePasswordForm form) {
         Account account = accountRepository.findById(id).get();
-        if(BCrypt.checkpw(form.getOldPassword(), account.getPassword())) {
+        if (BCrypt.checkpw(form.getOldPassword(), account.getPassword())) {
             account.setPassword(new BCryptPasswordEncoder().encode(form.getNewPassword()));
             accountRepository.save(account);
             return true;
         }
         return false;
-    }*/
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountRepository.findByUsername(username);
-        if(account == null) {
+        if (account == null) {
             throw new UsernameNotFoundException(username);
         }
-        //need fix
-        return null;
+        return new CustomUserDetail(account);
+
     }
 
 
